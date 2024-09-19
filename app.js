@@ -7,8 +7,8 @@ const app=express();
 const cors=require('cors')
 app.use(cors({
   origin: process.env.CORS_ORIGIN || '*', // Replace '*' with your allowed domains in production
-  methods: ['GET', 'POST'],
-  credential:true,
+  methods: ['GET', 'POST','PUT','DELETE'],
+  credentials: true,
 }))
 const server=createServer(app);
 const io=new Server(server,{
@@ -21,14 +21,11 @@ const io=new Server(server,{
   pingInterval: 25000, 
 });
 
+app.get("/",(req,res)=>{
+  console.log("SErver is working fine")
+  res.send("SERVER IS WORKING FINE")
+})
 
-// const { Server } = require("socket.io");
-// const io = new Server(process.env.PORT || 4000, {
-//   cors: {
-//     origin: process.env.CORS_ORIGIN || '*', // Replace '*' with your allowed domains in production
-//     methods: ['GET', 'POST']
-//   }
-// });
 
 const emailToSocketIdMap = new Map();
 const socketIdtoEmailMap = new Map();
@@ -51,10 +48,7 @@ io.on("connection", (socket) => {
     io.to(to).emit("incoming:call", { from: socket.id, offer });
   });
 
-  app.get("/",(req,res)=>{
-    console.log("SErver is working fine")
-    res.send("SERVER IS WORKING FINE")
-  })
+ 
 
   socket.on('call:accepted', ({ to, ans }) => {
     console.log("Call accepted", to, "Answer", ans);
@@ -77,5 +71,5 @@ io.on("connection", (socket) => {
 
 
 server.listen(PORT,()=>{
-  console.log("server is started")
+  console.log(`server is started on port ${PORT}`)
 })
