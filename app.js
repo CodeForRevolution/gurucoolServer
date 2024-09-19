@@ -8,15 +8,17 @@ const cors=require('cors')
 app.use(cors({
   origin: process.env.CORS_ORIGIN || '*', // Replace '*' with your allowed domains in production
   methods: ['GET', 'POST'],
-  Credential:true,
+  credential:true,
 }))
 const server=createServer(app);
 const io=new Server(server,{
   cors: {
-    origin: process.env.CORS_ORIGIN || '*', // Replace '*' with your allowed domains in production
+    origin: process.env.CORS_ORIGIN || '*',
     methods: ['GET', 'POST'],
-    Credential:true,
-  }
+    credentials: true,
+  },
+  pingTimeout: 60000,  // Adjust pingTimeout to give more time
+  pingInterval: 25000, 
 });
 
 
